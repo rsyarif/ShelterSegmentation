@@ -1,0 +1,41 @@
+2018-10-20 14:28:58.013467: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+Running on python version: 3.6.6
+Creating training images...
+Dataset size: 10
+Loading done.
+Saving to .npy files done.
+Creating test images...
+Dataset size: 10
+Loading done.
+Saving to .npy files done.
+Loading and preprocessing train data...
+Creating and compiling model...
+using model: unet64filters (unet but all kernels/filters made to be 64)
+Loading prev weights: /Users/rizki/Documents/Projects/ShelterSegmentation_take2/shelterdata_forTESTING/180505_v1/internal/prev_checkpoints_to_load/weights_unet64filters.h5
+Fitting model...
+Train on 8 samples, validate on 2 samples
+Epoch 1/10
+
+8/8 [==============================] - 41s 5s/step - loss: -0.7928 - dice_coef: 0.7928 - val_loss: -0.8860 - val_dice_coef: 0.8860
+Epoch 2/10
+
+8/8 [==============================] - 41s 5s/step - loss: -0.8030 - dice_coef: 0.8030 - val_loss: -0.8997 - val_dice_coef: 0.8997
+Epoch 3/10
+
+8/8 [==============================] - 41s 5s/step - loss: -0.8437 - dice_coef: 0.8437 - val_loss: -0.8939 - val_dice_coef: 0.8939
+Epoch 00003: early stopping
+Creating and compiling model...
+using model: unet64filters (unet but all kernels/filters made to be 64)
+Loading and preprocessing test data...
+Loading saved weights : /Users/rizki/Documents/Projects/ShelterSegmentation_take2/shelterdata_forTESTING/180505_v1/internal/checkpoints/weights_unet64filters.h5
+Predicting masks on test data...
+
+10/10 [==============================] - 15s 2s/step
+Using TensorFlow backend.
+/anaconda2/envs/Project-ShelterIdentification/lib/python3.6/site-packages/skimage/transform/_warps.py:105: UserWarning: The default mode, 'constant', will be changed to 'reflect' in skimage 0.15.
+  warn("The default mode, 'constant', will be changed to 'reflect' in "
+/anaconda2/envs/Project-ShelterIdentification/lib/python3.6/site-packages/skimage/transform/_warps.py:110: UserWarning: Anti-aliasing will be enabled by default in skimage 0.15 to avoid aliasing artifacts when down-sampling images.
+  warn("Anti-aliasing will be enabled by default in skimage 0.15 to "
+/anaconda2/envs/Project-ShelterIdentification/lib/python3.6/site-packages/skimage/io/_io.py:140: UserWarning: /Users/rizki/Documents/Projects/ShelterSegmentation_take2/shelterdata_forTESTING/180505_v1/output/unet64filters/03318_pred.png is a low contrast image
+  warn('%s is a low contrast image' % fname)
+Saving predicted masks to files to: /Users/rizki/Documents/Projects/ShelterSegmentation_take2/shelterdata_forTESTING/180505_v1/output/unet64filters
