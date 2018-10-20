@@ -145,6 +145,121 @@ def normalize_mask(imgs):
 
     return imgs
 
+def plot_data(path,sample,showNumSample):
+
+    data_path = os.path.join(path, 'input/'+sample)
+    images = [path for path in os.listdir(data_path) if not path.startswith('.')]
+
+    sample_filename=[]
+    mask_filename=[]
+    for i, sample_name in enumerate(images):
+        if 'sample' in sample_name and 'bmp' in sample_name:
+            #loop again and only include if there is a corressponding mask file
+            for j, mask_name in enumerate(images):
+                if sample_name.replace('sample','mask')==mask_name:
+                    sample_filename.append(sample_name)
+                    mask_filename.append(mask_name)
+
+    total = len(sample_filename)
+
+    imgs = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
+    imgs_mask = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
+
+    for i, image_name in enumerate(sample_filename):
+
+        img = imread(os.path.join(data_path, image_name), as_gray=True)
+        img = np.array([img])
+
+        img_mask = imread(os.path.join(data_path, image_name.replace('sample','mask')), as_gray=True)
+        img_mask = np.array([img_mask])
+
+        imgs[i] = img
+        imgs_mask[i] = img_mask
+
+    print ('sample '+sample+' data:')
+    plt.figure(figsize=(15,10))
+    for i in range(1,showNumSample+1):
+        plt.subplot(2,showNumSample,i)
+        plt.imshow(imgs[i],cmap=('gray'))
+        plt.subplot(2,showNumSample,i+showNumSample)
+        plt.imshow(imgs_mask[i],cmap=('gray'))
+    plt.show()
+
+
+def plot_predict(path,path_pred,model,showNumSample=1):
+
+    data_path = os.path.join(path, 'input/test')
+    images = [path for path in os.listdir(data_path) if not path.startswith('.')]
+
+    data_path_pred = os.path.join(path_pred, model)
+    # images_pred = [path for path in os.listdir(data_path_pred) if not path.startswith('.')]
+
+    sample_filename=[]
+    mask_filename=[]
+    test_num=[]
+    pred_filename=[]
+    for i, sample_name in enumerate(images):
+        if 'sample' in sample_name and 'bmp' in sample_name:
+            #loop again and only include if there is a corressponding mask file
+            for j, mask_name in enumerate(images):
+                if sample_name.replace('sample','mask')==mask_name:
+                    sample_filename.append(sample_name)
+                    mask_filename.append(mask_name)
+
+                    num=sample_name.split('_')[0]
+                    test_num.append(num)
+                    pred_filename.append('0{}_pred.png'.format(num))
+
+
+    # print ('\nsample_filename:',sample_filename)
+    # print ('\nmask_filename:',mask_filename)
+    # print ('\ntest_num:',test_num)
+    # print ('\npred_filename:',pred_filename)
+
+    total = len(sample_filename)
+
+    imgs = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
+    imgs_mask = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
+    imgs_pred = np.ndarray((total, image_rows-1, image_cols-1), dtype=np.uint8) #NEED TO CHECK WHAT THE INPUTS ARE AND WHY OUTPUT IS 128 by 128???
+
+
+    imgs_d = {}
+    imgs_mask_d = {}
+    imgs_pred_d = {}
+
+    print ('\nsample '+model+' prediction:')
+    plt.figure(figsize=(15,10))
+
+    for i, image_name in enumerate(test_num):
+        img = imread(os.path.join(data_path, '{}_sample.bmp'.format(image_name)), as_gray=True)
+        img = np.array([img])
+        imgs[i] = img
+        imgs_d[image_name]=img
+
+        img_mask = imread(os.path.join(data_path, '{}_mask.bmp'.format(image_name)), as_gray=True)
+        img_mask = np.array([img_mask])
+        imgs_mask[i] = img_mask
+        imgs_mask_d[image_name]=img_mask
+
+        img_pred = imread(os.path.join(data_path_pred,'0{}_pred.png'.format(image_name)), as_gray=True)
+        img_pred = np.array([img_pred])
+        imgs_pred[i] = img_pred
+        imgs_pred_d[image_name]=img_pred
+
+
+    # for i in range(1,showNumSample+1):
+        if(i==showNumSample):break
+        ax = plt.subplot(3,showNumSample,1+i)
+        ax.set_title(image_name)
+        plt.imshow(imgs[i],cmap=('gray'))
+        plt.subplot(3,showNumSample,1+i+showNumSample)
+        plt.imshow(imgs_mask[i],cmap=('gray'))
+        plt.subplot(3,showNumSample,1+i+showNumSample+showNumSample)
+        plt.imshow(imgs_pred[i],cmap=('gray'))
+
+
+    plt.show()
+
 
 if __name__ == '__main__':
     # data_path = '/media/data'
